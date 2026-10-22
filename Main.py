@@ -66,11 +66,72 @@ while running:
     print("4) Quit")
 
     choice = int(input("Enter your choice (1-4): "))
-#Add scores
-if choice == "1":
-    t1_name = input("Enter Team 1 name: ")
-    t2_name = input("Enter Team 2 name: ")
+#1)Add scores
+    if choice == 1:
+        t1_name = input("Enter Team 1 name: ")
+        t2_name = input("Enter Team 2 name: ")
 
-    g1 = int(input(f"Enter goals for {t1_name}:  "))
-    g2 = int(input(f"Enter goals for {t2_name}: "))
+        g1 = int(input(f"Enter goals for {t1_name}:  "))
+        g2 = int(input(f"Enter goals for {t2_name}: "))
+#Find the index of teams
+        index_1 = Team_names.index(t1_name)
+        index_2 = Team_names.index(t2_name)
+
+#Update games played, goals for, and goals against
+        Games_played[index_1] += 1
+        Games_played[index_2] += 1
+
+        Team_goals_for[index_1] += g1
+        Team_goals_against[index_1] += g2
+        Team_goals_for[index_2] += g2
+        Team_goals_against[index_1] += g1
+
+#Decide wins, losses, and ties
+        if g1 > g2:
+            Team_wins[index_1] += 1
+            Team_losses[index_1] += 1
+            print(f"{t1_name} won!")
+        elif g2 > g1:
+            Team_wins[index_2] += 1
+            Team_losses[index_2] += 1
+            print(f"{t2_name} won!")
+        else:
+            Team_ties[index_1] += 1
+            Team_ties[index_2] += 1
+            print("It's a tie!")
+
+#2)See team stats
+    elif choice == 2:
+        find_team = input("Enter Team name to view stats: ")
+        if  find_team in Team_names:
+            index = Team_names.index(find_team)
+            print(f"Stats for {find_team}:")
+            print(f"Team wins: {Team_wins[index]}")
+            print(f"Team losses: {Team_losses[index]}")
+            print(f"Team ties: {Team_ties[index]}")
+            print(f"Team goals for: {Team_goals_for[index]}")
+            print(f"Team goals against: {Team_goals_against[index]}")
+        else:
+            print(f"Team {find_team} not found!")
+
+#3)See overall standings
+    elif choice == 3:
+        print("Overall standings")
+        print(f"{'Team': <15} {'Points':<8} {'GF':<5} {'GA':<5}")
+        print("-"*35)
+        #Calculate points for each team
+        for team in range(numTeams):
+            points = (Team_wins[team] *2) + (Team_ties[team] *1)
+            print(f"{Team_names[team]:<15} {points:<8} {Team_goals_for[team]:<5} {Team_goals_against[team]:<5}")
+
+#4)Quit
+    elif choice == 4:
+        print("Thank you for using SportsScores Tracking System!")
+        running = False
+    else:
+        print("Invalid choice! Please enter a valid choice!")
+
+
+
+
 
