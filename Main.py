@@ -32,7 +32,16 @@
 #   4) Say goodbye and break out of the loop
 #Ask for number of teams
 print("Welcome to SportsScores tracking system!")
-numTeams = int(input("How many teams are playing? "))
+while True:
+    try:
+        numTeams = int(input("How many teams are playing? "))
+        if numTeams >1:
+            break
+        print("You need at least 2 teams to play so enter 2 or more teams if you want to play.")
+    except ValueError:
+        print("Please enter a valid integer!")
+
+
 
 #create lists to score team information
 
@@ -68,11 +77,32 @@ while running:
     choice = int(input("Enter your choice (1-4): "))
 #1)Add scores
     if choice == 1:
-        t1_name = input("Enter Team 1 name: ")
+        print("Current Teams")
+        for team in range (len(Team_names)):
+            print(f"{team+1}. {Team_names[team]}")
+        t1_name = input("Enter Team 1 name: ").strip()
+        while t1_name not in Team_names:
+            print(f"Team {t1_name} not found! Please enter a valid Team name.")
+            t1_name = input("Enter Team 1 name: ").strip()
         t2_name = input("Enter Team 2 name: ")
+        while t2_name not in Team_names or t2_name == t1_name:
+            if t2_name == t1_name:
+                print("A team can't play against itself. Choose another name")
+            else:
+                print(f"Team {t2_name} not found! Please enter a valid Team name.")
+            t2_name = input("Enter Team 2 name: ").strip()
+        while True:
+            try:
+                g1 = int(input(f"Enter goals scored by {t1_name}:  "))
+                g2 = int(input(f"Enter goals scored by {t2_name}: "))
+                if g1 >= 0 and g2 >= 0:
+                    break
+                print("Goals can't be less than 0!")
+            except ValueError:
+                print("Please enter a valid integer for goals score!")
 
-        g1 = int(input(f"Enter goals for {t1_name}:  "))
-        g2 = int(input(f"Enter goals for {t2_name}: "))
+
+
 #Find the index of teams
         index_1 = Team_names.index(t1_name)
         index_2 = Team_names.index(t2_name)
@@ -89,11 +119,11 @@ while running:
 #Decide wins, losses, and ties
         if g1 > g2:
             Team_wins[index_1] += 1
-            Team_losses[index_1] += 1
+            Team_losses[index_2] += 1
             print(f"{t1_name} won!")
         elif g2 > g1:
             Team_wins[index_2] += 1
-            Team_losses[index_2] += 1
+            Team_losses[index_1] += 1
             print(f"{t2_name} won!")
         else:
             Team_ties[index_1] += 1
@@ -117,12 +147,12 @@ while running:
 #3)See overall standings
     elif choice == 3:
         print("Overall standings")
-        print(f"{'Team': <15} {'Points':<8} {'GF':<5} {'GA':<5}")
+        print(f"{'Team': <15} {'Points':<5} {'GF':<5} {'GA':<5}")
         print("-"*35)
         #Calculate points for each team
         for team in range(numTeams):
             points = (Team_wins[team] *2) + (Team_ties[team] *1)
-            print(f"{Team_names[team]:<15} {points:<8} {Team_goals_for[team]:<5} {Team_goals_against[team]:<5}")
+            print(f"{Team_names[team]:<15} {points:<5} {Team_goals_for[team]:<5} {Team_goals_against[team]:<5}")
 
 #4)Quit
     elif choice == 4:
